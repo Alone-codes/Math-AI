@@ -55,6 +55,22 @@ chatbot = Chat(pairs, reflections)
 
 app = Flask(__name__)
 
+def validate_math_ast(node):
+    if isinstance(node, ast.BinOp):
+        if not isinstance(node.op, (ast.Add, ast.Sub, ast.Mult, ast.Div, ast.Mod, ast.Pow, ast.FloorDiv)):
+            return False
+        return validate_math_ast(node.left) and validate_math_ast(node.right)
+    elif isinstance(node, ast.UnaryOp):
+        if not isinstance(node.op, (ast.UAdd, ast.USub)):
+            return False
+        return validate_math_ast(node.operand)
+    elif isinstance(node, ast.Constant):
+        return isinstance(node.value, (int, float, complex))
+    elif hasattr(ast, 'Num') and isinstance(node, ast.Num):
+        return isinstance(node.n, (int, float, complex))
+    else:
+        return False
+
 def evaluate_math_expression(expression):
     """Safely evaluate math expressions"""
     expression = expression.replace(' ', '')
@@ -63,19 +79,10 @@ def evaluate_math_expression(expression):
     if not re.match(r'^[\d+\-*/().\s]+$', expression):
         return "Please enter a valid math expression with numbers and +-*/() only."
     
-    # try:
-    #     # Safer alternative to eval()
-    #     tree = ast.parse(expression, mode='eval')
-    #     if not all(isinstance(node, (ast.Constant, ast.UnaryOp, ast.BinOp)) for node in ast.walk(tree):
-    #         raise ValueError("Unsafe expression")
-    #     result = eval(compile(tree, filename='', mode='eval'), {'__builtins__': None})
-    #     return f"The result is: {result}"
-    # except Exception:
-    #     return "Sorry, I couldn't evaluate that. Please check your expression."
     try:
         # Safer alternative to eval()
         tree = ast.parse(expression, mode='eval')
-        if not all(isinstance(node, (ast.Constant, ast.UnaryOp, ast.BinOp)) for node in ast.walk(tree)):
+        if not validate_math_ast(tree.body):
             raise ValueError("Unsafe expression")
         result = eval(compile(tree, filename='', mode='eval'), {'__builtins__': None})
         return f"The result is: {result}"
