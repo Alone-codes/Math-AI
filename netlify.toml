@@ -1,3 +1,0 @@
-[build]
-  publish = "MATH-BOT/templates"
-  functions = "netlify/functions"
