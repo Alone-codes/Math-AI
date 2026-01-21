@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,9 +17,9 @@
             --bot-message-bg: #f1f5f9;
             --user-message-bg: #818cf8;
             --border-color: #e2e8f0;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
-            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
         }
 
         [data-theme="dark"] {
@@ -42,18 +43,22 @@
             background-color: var(--bg-color);
             color: var(--text-primary);
             transition: all 0.3s ease;
-            min-height: 100vh;
+            margin: 0;
+            padding: 0;
         }
 
         .container {
             max-width: 1000px;
             margin: 0 auto;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
         }
 
         .header {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1000px;
+            max-width: 100vw;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -61,6 +66,7 @@
             background-color: var(--bg-color);
             border-bottom: 1px solid var(--border-color);
             box-shadow: var(--shadow-sm);
+            z-index: 10;
         }
 
         .header-title {
@@ -91,9 +97,20 @@
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.2); opacity: 0.7; }
-            100% { transform: scale(1); opacity: 1; }
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.2);
+                opacity: 0.7;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
 
         .controls {
@@ -117,11 +134,15 @@
         }
 
         .chat-container {
-            flex: 1;
-            overflow-y: auto;
+            height: 100vh;
             padding: 2rem;
+            padding-top: 6rem;
+                padding-bottom: 12rem;
+            overflow-y: auto;
             background-color: var(--chat-bg);
             scroll-behavior: smooth;
+            max-width: 1000px;
+            margin: 0 auto;
         }
 
         .message {
@@ -188,10 +209,17 @@
         }
 
         .input-container {
+            position: fixed;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1000px;
+            max-width: 100vw;
             padding: 1.5rem;
             background-color: var(--bg-color);
             border-top: 1px solid var(--border-color);
             box-shadow: var(--shadow-lg);
+            z-index: 10;
         }
 
         .input-wrapper {
@@ -260,32 +288,99 @@
             transform: translateY(-1px);
         }
 
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            padding: 1rem 2rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 0.25rem;
+            margin-left: 1rem;
+        }
+
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--text-secondary);
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(1) { animation-delay: 0s; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: scale(1);
+                opacity: 0.4;
+            }
+            30% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1000px;
+            max-width: 100vw;
+            background-color: var(--bg-color);
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            text-align: center;
+            padding: 1rem;
+            z-index: 10;
+        }
+
         @media (max-width: 768px) {
-            .container {
-                height: 100dvh;
+            .header {
+                width: 100vw;
+                left: 0;
+                transform: none;
+            }
+
+            .chat-container {
+                padding: 1rem;
+                padding-top: 6rem;
+            padding-bottom: 12rem;
+                max-width: 100vw;
+            }
+
+            .input-container {
+                width: 100vw;
+                left: 0;
+                transform: none;
+                padding: 1rem;
+            }
+
+            .footer {
+                width: 100vw;
+                left: 0;
+                transform: none;
             }
 
             .header-title h1 {
                 font-size: 1.25rem;
             }
 
-            .chat-container {
-                padding: 1rem;
-            }
-
             .message-bubble {
                 max-width: 85%;
-            }
-
-            .input-container {
-                padding: 1rem;
             }
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <header class="header">
+
+<body data-theme="dark">
+    <header class="header">
             <div class="header-title">
                 <h1>MATH BOT</h1>
                 <div class="bot-status">
@@ -300,6 +395,7 @@
             </div>
         </header>
 
+    <div class="container">
         <div class="chat-container" id="chatContainer">
             <!-- Messages will be added here -->
         </div>
@@ -327,9 +423,20 @@
                         <i class="fas fa-paper-plane"></i>
                     </button>
                 </div>
+                </div>
+
             </div>
+
         </div>
+
     </div>
+
+    </div>
+
+    <footer class="footer">
+        Created by Vishwa | <a href="https://github.com/Alone-codes/Math-AI"
+            style="color: var(--text-primary); text-decoration: none;" target="_blank">GitHub Repo</a>
+    </footer>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
@@ -340,24 +447,26 @@
         const sendButton = document.querySelector('.send-button');
         const typingIndicator = document.querySelector('.typing-indicator');
 
-        let isDarkTheme = false;
+        let isDarkTheme = true;
+        themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+
         themeToggle.addEventListener('click', () => {
             isDarkTheme = !isDarkTheme;
             body.setAttribute('data-theme', isDarkTheme ? 'dark' : 'light');
-            themeToggle.innerHTML = isDarkTheme ? 
-                '<i class="fas fa-sun"></i>' : 
+            themeToggle.innerHTML = isDarkTheme ?
+                '<i class="fas fa-sun"></i>' :
                 '<i class="fas fa-moon"></i>';
         });
 
         function createMessageElement(content, isUser = false) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
-            
+
             messageDiv.innerHTML = `
                 <div class="avatar">${isUser ? 'U' : 'AI'}</div>
                 <div class="message-bubble">${content}</div>
             `;
-            
+
             return messageDiv;
         }
 
@@ -379,13 +488,13 @@
         function handleSendMessage() {
             const message = messageInput.value.trim();
             if (message) {
-                addMessage(message, true); 
+                addMessage(message, true);
                 messageInput.value = '';
-                showTypingIndicator(); 
-                $.get("/get", { msg: message }, function(data) {
+                showTypingIndicator();
+                $.get("/get", { msg: message }, function (data) {
                     hideTypingIndicator();
                     const botResponse = data.response || "Sorry, I didn’t understand that.";
-                    addMessage(botResponse); 
+                    addMessage(botResponse);
                 });
             }
         }
@@ -403,4 +512,5 @@
 
 
 </body>
+
 </html>
