@@ -1,5 +1,5 @@
 # Math Bot
-Live Link : https://math-ai-6ezf.onrender.com
+Live Link (render) : https://math-ai-6ezf.onrender.com
 
 A Flask-based AI chatbot that specializes in math calculations and general conversation.
 
